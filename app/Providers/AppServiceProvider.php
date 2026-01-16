@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+//codice da chatGPT
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -31,5 +36,14 @@ class AppServiceProvider extends ServiceProvider
             $tags = Tag::all();
             View::share(['tags' => $tags]);
         }
+
+        //codice da chatGPT-rate limiter per rotte pubbliche di tipo GET
+        RateLimiter::for('public-get', function (Request $request) {
+         return Limit::perMinute(30)->by($request->ip());
+        });
+
+
+
+
     }
 }
