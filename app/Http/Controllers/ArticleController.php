@@ -62,6 +62,16 @@ class ArticleController extends Controller implements HasMiddleware
             'user_id' => Auth::user()->id,
             'slug' => Str::slug($request->title),
         ]);
+
+        //codice per conservare il log dell'utente che ha creato l'articolo
+
+        Log::info('Article created', [
+            'user_id' => Auth::id(),
+            'article_id' => $article->id,
+            'ip' => request()->ip(),
+        ]);
+
+        // ----//
         
         $tags = explode(',', $request->tags);
 
@@ -120,6 +130,18 @@ class ArticleController extends Controller implements HasMiddleware
             'slug' => Str::slug($request->title),
         ]);
 
+
+        //codice per conservare il log dell'utente che ha modificato l'articolo
+
+        Log::info('Article updated', [
+            'user_id' => Auth::id(),
+            'article_id' => $article->id,
+            'ip' => request()->ip(),
+        ]);
+
+        // ----//   
+
+
         if($request->image){
             Storage::delete($article->image);
             $article->update([
@@ -155,6 +177,14 @@ class ArticleController extends Controller implements HasMiddleware
             $article->tags()->detach($tag);
         }
         $article->delete();
+
+        //codice per conservare il log dell'utente che ha cancellato l'articolo
+
+        Log::warning('Article deleted', [
+            'user_id' => Auth::id(),
+            'article_id' => $article->id,
+            'ip' => request()->ip(),
+    ]); 
         
         return redirect()->back()->with('message', 'Articolo cancellato con successo');
     }

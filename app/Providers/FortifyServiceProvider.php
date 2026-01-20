@@ -13,6 +13,13 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 
+//codice da chatGPT
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Auth\Events\Registered;
+
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -51,6 +58,30 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function () {
             return view('auth.register');
+        });
+
+
+
+        //codice per il logging da chatGPT
+        Event::listen(Login::class, function ($event) {
+        Log::info('User login', [
+            'user_id' => $event->user->id,
+            'ip' => request()->ip(),
+         ]);
+        });
+
+        Event::listen(Logout::class, function ($event) {
+            Log::info('User logout', [
+                'user_id' => $event->user->id,
+                'ip' => request()->ip(),
+            ]);
+        });
+
+        Event::listen(Registered::class, function ($event) {
+            Log::info('User registered', [
+                'user_id' => $event->user->id,
+                'ip' => request()->ip(),
+            ]);
         });
     }
 }

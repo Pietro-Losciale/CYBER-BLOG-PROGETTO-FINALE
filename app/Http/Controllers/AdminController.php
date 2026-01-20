@@ -58,6 +58,14 @@ class AdminController extends Controller
         $user->is_admin = true;
         $user->save();
 
+        //codice per conservare il log dell'utente che ha promosso un admin
+        Log::warning('Role changed', [
+        'performed_by' => Auth::id(),
+        'target_user_id' => $user->id,
+        'new_role' => 'admin',
+        'ip' => request()->ip(),
+       ]);
+
         return redirect(route('admin.dashboard'))->with('message', "$user->name is now administrator");
     }
 
@@ -65,12 +73,30 @@ class AdminController extends Controller
         $user->is_revisor = true;
         $user->save();
 
+        //codice per conservare il log dell'utente che ha promosso un revisore
+
+        Log::warning('Role changed', [
+        'performed_by' => Auth::id(),
+        'target_user_id' => $user->id,
+        'new_role' => 'revisor',
+        'ip' => request()->ip(),
+        ]);
+
         return redirect(route('admin.dashboard'))->with('message', "$user->name is now revisor");
     }
 
     public function setWriter(User $user){
         $user->is_writer = true;
         $user->save();
+
+        //codice per conservare il log dell'utente che ha promosso un writer
+
+        Log::warning('Role changed', [
+        'performed_by' => Auth::id(),
+        'target_user_id' => $user->id,
+        'new_role' => 'writer',
+        'ip' => request()->ip(),
+       ]);
 
         return redirect(route('admin.dashboard'))->with('message', "$user->name is now writer");
     }
