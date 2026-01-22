@@ -5,6 +5,10 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+//codice da chatGPT
+use Illuminate\Support\Facades\Auth;
+//-----------------//
+
 class HttpService
 {
     protected $client;
@@ -21,6 +25,24 @@ class HttpService
     public function getRequest($url)
     {
         $parsedUrl = parse_url($url);
+
+        //CODICE DA CHATGPT
+        // Controllo ruolo: solo admin possono accedere a internal.finance
+       if (
+        isset($parsedUrl['host']) &&
+        $parsedUrl['host'] === 'internal.finance' &&
+        (!Auth::check() || !Auth::user()->is_admin)
+          ) {
+        return 'Unauthorized internal request';
+          }
+       //------------//
+
+
+
+
+
+
+
 
         // Validate protocol
         if (!in_array($parsedUrl['scheme'], $this->allowedProtocols)) {
