@@ -25,7 +25,13 @@
                     </div>
                 </div>
                 <hr>
-                <p>{!!$article->body!!}</p>
+                {{-- <p>{!!$article->body!!}</p> --}}
+                <!-- PERICOLOSO: esegue HTML/JS raw -->
+
+                {{-- CODICE SICURO --}}
+                <p>{{ $article->body }}</p>
+
+
                 @if (Auth::user() && Auth::user()->is_revisor && !$article->is_accepted)
                     <div class="container my-5">
                         <div class="row">

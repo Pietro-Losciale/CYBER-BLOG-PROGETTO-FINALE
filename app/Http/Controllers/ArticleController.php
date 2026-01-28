@@ -52,11 +52,16 @@ class ArticleController extends Controller implements HasMiddleware
             'category' => 'required',
             'tags' => 'required'
         ]);
+         // === MITIGAZIONE XSS - Da perplexity ===
+        $cleanBody = strip_tags($request->body, '<p><br><strong><em><ul><ol><li><h1><h2><h3>');
+        $cleanBody = htmlspecialchars($cleanBody, ENT_QUOTES, 'UTF-8');
+    // === FINE MITIGAZIONE ===
 
         $article = Article::create([
             'title' => $request->title,
             'subtitle' => $request->subtitle,
-            'body' => $request->body,
+            // 'body' => $request->body,
+            'body' => $cleanBody,  // ← ORA È SICURO
             'image' => $request->file('image')->store('public/images'),
             'category_id' => $request->category,
             'user_id' => Auth::user()->id,
@@ -122,10 +127,17 @@ class ArticleController extends Controller implements HasMiddleware
             'tags' => 'required'
         ]);
 
+        // === MITIGAZIONE XSS - da Perplexity ===
+    $cleanBody = strip_tags($request->body, '<p><br><strong><em><ul><ol><li><h1><h2><h3>');
+    $cleanBody = htmlspecialchars($cleanBody, ENT_QUOTES, 'UTF-8');
+    // === FINE MITIGAZIONE ===
+
+        
         $article->update([
             'title' => $request->title,
             'subtitle' => $request->subtitle,
-            'body' => $request->body,
+            // 'body' => $request->body,
+             'body' => $cleanBody,  // ← ORA È SICURO
             'category_id' => $request->category,
             'slug' => Str::slug($request->title),
         ]);
