@@ -1,3 +1,11 @@
+## Cybersecurity - Progetto Finale 
+Analisi della sicurezza di un'applicazione web Laravel attraverso l'individuazione
+di vulnerabilità critiche, la simulazione di attacchi reali e l'implementazione di
+mitigazioni efficaci secondo gli standard OWASP
+
+nel Paper e' possibile trovare la documentazione che illustra ogni vulnerabilita' affrontata, l'attacco eseguito e la successiva mitigazione implementata. 
+Piu' info disponibili nelle slides. 
+
 ## Rate limiter mancante
 
 ### Scenario:
